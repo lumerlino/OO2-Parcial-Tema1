@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?> <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="datos.Permiso" table="permiso">
+		<id column="idPermiso" name="idPermiso">
+			<generator class="identity" />
+		</id>
+		
+		<many-to-one name="pedido" class="datos.Persona" column="idPersona" not-null="true" />
+		
+		<property name="fecha" column="fecha" type="LocalDate" />
+		
+		<set table="permisoxlugar" name="desdeHasta" outer-join="true">
+			<key column="idPermiso" />
+			<many-to-many column="idLugar" class="datos.Lugar" />
+		</set>		
+		
+		<joined-subclass name="datos.PermisoPeriodo" table="permisoperiodo">
+			<key column="idPermisoPeriodo" />
+			<property column="cantDias" name="cantDias" type="int" />
+			<property column="vacaciones" name="vacaciones" type="boolean" />
+			
+			<many-to-one name="rodado" class="datos.Rodado" column="idRodado" not-null="true" />
+			
+		</joined-subclass>
+		
+		<joined-subclass name="datos.PermisoDiario" table="permisodiario">
+			<key column="idPermisoDiario" />
+			<property column="motivo" name="motivo" type="string" />
+		</joined-subclass>
+		
+	</class>
+</hibernate-mapping>
